@@ -1,3 +1,4 @@
+#!/usr/bin/ruby
 # Для игры достаточно запустить файл.
 # Гарантированно работает с версией Ruby 2.7
 
@@ -39,11 +40,11 @@ end
 
 def start_game
 	if rand(1..2) == 1
-		puts "#{@home[:name]} начинает этот матч.#{@str}\r"
+		print "#{@home[:name]} начинает этот матч.#{@str}\r"
 		interval
 		home_attack
 	else
-		puts "#{@guest[:name]} начинает этот матч.#{@str}\r"
+		print "#{@guest[:name]} начинает этот матч.#{@str}\r"
 		interval
 		guest_attack
 	end
@@ -66,14 +67,14 @@ def home_attack
 		if @time > 90
 			print "Время матча подошло к концу.#{@str}\r"
 			interval
-			puts "Итоговый счёт: #{@home[:name]} #{@score[0]}:#{@score[1]} #{@guest[:name]}. Сыграно #{@time} минут.#{@str}\r"
+			print "Итоговый счёт: #{@home[:name]} #{@score[0]}:#{@score[1]} #{@guest[:name]}. Сыграно #{@time} минут.#{@str}\r"
 			return @score
 		end
 		print "#{@guest[:name]} начинает свою атаку.#{@str}\r"
 		interval
 		@time += 1
 		guest_attack
-	end	
+	end
 end
 
 # Домашняя команда защищается. Защитное действие получается с вероятностью силы домашней команды:
@@ -86,12 +87,12 @@ def home_defence
 		interval
 		print "#{@guest[:name]} забивает! Сыграно #{@time} минут. #{@str}\r"
 		interval
-		puts "#{@home[:name].upcase} #{@score[0]}:#{@score[1]} #{@guest[:name].upcase} #{@time} минут.#{@str}\r"
+		print "#{@home[:name].upcase} #{@score[0]}:#{@score[1]} #{@guest[:name].upcase} #{@time} минут.#{@str}\r"
 		interval
 		if @time > 90
 			print "Время матча подошло к концу. #{@str}\r"
 			interval
-			puts "Итоговый счёт: #{@home[:name]} #{@score[0]}:#{@score[1]} #{@guest[:name]}. Сыграно #{@time} минут. #{@str}\r"
+			print "Итоговый счёт: #{@home[:name]} #{@score[0]}:#{@score[1]} #{@guest[:name]}. Сыграно #{@time} минут. #{@str}\r"
 			return @score
 		end
 		@time += 1
@@ -103,7 +104,7 @@ def home_defence
 		if @time > 90
 			print "Время матча подошло к концу. #{@str}\r"
 			interval
-			puts "Итоговый счёт: #{@home[:name]} #{@score[0]}:#{@score[1]} #{@guest[:name]}. Сыграно #{@time} минут. #{@str}\r"
+			print "Итоговый счёт: #{@home[:name]} #{@score[0]}:#{@score[1]} #{@guest[:name]}. Сыграно #{@time} минут. #{@str}\r"
 			return @score
 		end
 		@time += 1
@@ -135,7 +136,7 @@ def guest_attack
 		interval
 		@time += 1
 		home_attack
-	end	
+	end
 end
 
 # Гостевая команда защищается. Защитное действие получается с вероятностью силы гостевой команды:
@@ -148,12 +149,12 @@ def guest_defence
 		interval
 		print "#{@home[:name]} забивает! Сыграно #{@time} минут. #{@str}\r"
 		interval
-		puts "#{@home[:name].upcase} #{@score[0]}:#{@score[1]} #{@guest[:name].upcase} #{@time} минут.#{@str}\r"
+		print "#{@home[:name].upcase} #{@score[0]}:#{@score[1]} #{@guest[:name].upcase} #{@time} минут.#{@str}\r"
 		interval
 		if @time > 90
 			print "Время матча подошло к концу. #{@str}\r"
 			interval
-			puts "Итоговый счёт: #{@home[:name]} #{@score[0]}:#{@score[1]} #{@guest[:name]}. Сыграно #{@time} минут. #{@str}\r"
+			print "Итоговый счёт: #{@home[:name]} #{@score[0]}:#{@score[1]} #{@guest[:name]}. Сыграно #{@time} минут. #{@str}\r"
 			return @score
 		end
 		@time += 1
@@ -165,7 +166,7 @@ def guest_defence
 		if @time > 90
 			print "Время матча подошло к концу. #{@str}\r"
 			interval
-			puts "Итоговый счёт: #{@home[:name]} #{@score[0]}:#{@score[1]} #{@guest[:name]}. Сыграно #{@time} минут. #{@str}\r"
+			print "Итоговый счёт: #{@home[:name]} #{@score[0]}:#{@score[1]} #{@guest[:name]}. Сыграно #{@time} минут. #{@str}\r"
 			return @score
 		end
 		@time += 1
