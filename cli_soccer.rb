@@ -38,139 +38,73 @@ def self.goal_in(team)
    10.times {print "#{team.upcase} GOAL!#{@str}\r"; interval; print "#{@str}\r"; interval}
 end
 
+def game_end
+  print "Время матча подошло к концу. #{@str}\r"
+  interval
+  puts "Итоговый счёт: #{@home[:name]} #{@score[0]}:#{@score[1]} #{@guest[:name]}. Сыграно #{@time} минут. #{@str}\r"
+  return @score
+end
+
 def start_game
 	if rand(1..2) == 1
 		print "#{@home[:name]} начинает этот матч.#{@str}\r"
 		interval
-		home_attack
+		attack(@home)
 	else
 		print "#{@guest[:name]} начинает этот матч.#{@str}\r"
 		interval
-		guest_attack
+		attack(@guest)
 	end
 end
 
-# Домашняя команда с мячом. Атакующее действие получается с вероятностью силы домашней команды:
-def home_attack
-	if rand(1..100) <= @home[:power]
-		print "У #{@home[:name]} получается начать атаку. Пас вперёд.#{@str}\r"
+def attack(command)
+	if rand(1..100) <= command[:power]
+		print "У #{command[:name]} получается начать атаку. Пас вперёд.#{@str}\r"
 		interval
-		print "#{@home[:name]} наносит удар.#{@str}\r"
+		print "#{command[:name]} наносит удар.#{@str}\r"
 		interval
 		@time += 1
-		guest_defence
+		command == @home ? defence(@guest) : defence(@home)
 	else
-		print "Удар у #{@home[:name]} не получается.#{@str}\r"
+		print "Удар у #{command[:name]} не получается.#{@str}\r"
 		interval
-		print "#{@home[:name]} теряет мяч.#{@str}\r"
+		print "#{command[:name]} теряет мяч.#{@str}\r"
 		interval
-		if @time > 90
-			print "Время матча подошло к концу.#{@str}\r"
-			interval
-			print "Итоговый счёт: #{@home[:name]} #{@score[0]}:#{@score[1]} #{@guest[:name]}. Сыграно #{@time} минут.#{@str}\r"
-			return @score
-		end
-		print "#{@guest[:name]} начинает свою атаку.#{@str}\r"
+    if @time > 90
+      game_end
+    end
+		print "#{command == @home ? @guest[:name] : @home[:name]} начинает свою атаку.#{@str}\r"
 		interval
 		@time += 1
-		guest_attack
+		command == @home ? attack(@guest) : attack(@home)
 	end
 end
 
-# Домашняя команда защищается. Защитное действие получается с вероятностью силы домашней команды:
-def home_defence
-	print "Мяч летит в сторону ворот #{@home[:name]}! #{@str}\r"
+def defence(command)
+	print "Мяч летит в сторону ворот #{command[:name]}! #{@str}\r"
 	interval
-	if rand(1..100) > @home[:power]
-		@score[1] += 1
-		goal_in(@guest[:name])
+	if rand(1..100) > command[:power]
+		command == @home ? @score[1] += 1 : @score[0] += 1
+		goal_in(command == @home ? @guest[:name] : @home[:name])
 		interval
-		print "#{@guest[:name]} забивает! Сыграно #{@time} минут. #{@str}\r"
+		print "#{command == @home ? @guest[:name] : @home[:name]} забивает! Сыграно #{@time} минут. #{@str}\r"
 		interval
-		print "#{@home[:name].upcase} #{@score[0]}:#{@score[1]} #{@guest[:name].upcase} #{@time} минут.#{@str}\r"
+		puts "#{@home[:name].upcase} #{@score[0]}:#{@score[1]} #{@guest[:name].upcase} #{@time} минут.#{@str}\r"
 		interval
 		if @time > 90
-			print "Время матча подошло к концу. #{@str}\r"
-			interval
-			print "Итоговый счёт: #{@home[:name]} #{@score[0]}:#{@score[1]} #{@guest[:name]}. Сыграно #{@time} минут. #{@str}\r"
-			return @score
-		end
+      game_end
+    end
 		@time += 1
 		interval
-		home_attack
+		command == @home ? attack(@home) : attack(@guest)
 	else
 		print "#{@home[:name]} справляется с этой атакой и начинает свою. Сыграно #{@time} минут. #{@str}\r"
 		interval
-		if @time > 90
-			print "Время матча подошло к концу. #{@str}\r"
-			interval
-			print "Итоговый счёт: #{@home[:name]} #{@score[0]}:#{@score[1]} #{@guest[:name]}. Сыграно #{@time} минут. #{@str}\r"
-			return @score
-		end
+    if @time > 90
+      game_end
+    end
 		@time += 1
-		home_attack
-	end
-end
-
-# Гостевая команда с мячом. Атакующее действие получается с вероятностью силы гостевой команды:
-def guest_attack
-	if rand(1..100) <= @guest[:power]
-		print "У #{@guest[:name]} получается начать атаку. Пас вперёд. #{@str}\r"
-		interval
-		print "#{@guest[:name]} наносит удар. #{@str}\r"
-		interval
-		@time += 1
-		home_defence
-	else
-		print "Удар у #{@guest[:name]} не получается. #{@str}\r"
-		interval
-		print "#{@guest[:name]} теряет мяч. #{@str}\r"
-		interval
-		if @time > 90
-			print "Время матча подошло к концу. #{@str}\r"
-			interval
-			print "Итоговый счёт: #{@home[:name]} #{@score[0]}:#{@score[1]} #{@guest[:name]}. Сыграно #{@time} минут. #{@str}\r"
-			return @score
-		end
-		print "#{@home[:name]} начинает свою атаку. #{@str}\r"
-		interval
-		@time += 1
-		home_attack
-	end
-end
-
-# Гостевая команда защищается. Защитное действие получается с вероятностью силы гостевой команды:
-def guest_defence
-	print "Мяч летит в сторону ворот #{@guest[:name]}! #{@str}\r"
-	interval
-	if rand(1..100) > @guest[:power]
-		@score[0] += 1
-		goal_in(@home[:name])
-		interval
-		print "#{@home[:name]} забивает! Сыграно #{@time} минут. #{@str}\r"
-		interval
-		print "#{@home[:name].upcase} #{@score[0]}:#{@score[1]} #{@guest[:name].upcase} #{@time} минут.#{@str}\r"
-		interval
-		if @time > 90
-			print "Время матча подошло к концу. #{@str}\r"
-			interval
-			print "Итоговый счёт: #{@home[:name]} #{@score[0]}:#{@score[1]} #{@guest[:name]}. Сыграно #{@time} минут. #{@str}\r"
-			return @score
-		end
-		@time += 1
-		interval
-		guest_attack
-	else
-		print "#{@guest[:name]} справляется с этой атакой и начинает свою. Сыграно #{@time} минут. #{@str}\r"
-		interval
-		if @time > 90
-			print "Время матча подошло к концу. #{@str}\r"
-			interval
-			print "Итоговый счёт: #{@home[:name]} #{@score[0]}:#{@score[1]} #{@guest[:name]}. Сыграно #{@time} минут. #{@str}\r"
-			return @score
-		end
-		@time += 1
-		guest_attack
+		command == @home ? attack(@home) : attack(@guest)
 	end
 end
 
