@@ -16,7 +16,7 @@ case ARGV[0]
         end
         printf("%5.1f GB", arr.sum/1000000000.0)
     when "save"
-        file = File.open("/home/asv/summary_traffic.txt", "a")
+        file = File.open("./summary_traffic.txt", "a")
         file.puts "#{time}\t#{current_bytes}"
         file.close
         puts "The data has been successfully saved."
