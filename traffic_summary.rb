@@ -5,7 +5,7 @@
 # - отображает суммарный текущий трафик
 
 time = Time.now.strftime("%Y.%m.%d\t%H:%M")
-current_bytes = %x(ifconfig enx0469f8ec943b | grep -m1 RX | awk '{ print $5 }').to_i
+current_bytes = File.open('/sys/class/net/enx0469f8ec943b/statistics/rx_bytes', &:readline).to_i
 
 case ARGV[0]
     when "show"
